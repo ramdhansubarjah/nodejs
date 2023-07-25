@@ -1,36 +1,31 @@
-// mengambil argumen dari command line
-// const command = process.argv[2];
-// if(command === 'add') {
+const yargs = require('yargs');
+const contacts = require('./contacts');
 
-// } else if(command === 'remove'){
+yargs.command({
+      command: 'add',
+      describe: 'Menambahkan contact baru',
+      builder: {
+        nama: {
+          describe: 'nama lengkap',
+          demandOption: true,
+          type: 'string',
+        },
+        alamat: {
+          describe: 'email',
+          demandOption: false,
+          type: 'string',
+        },
+          noHP: {
+          describe: 'Nomor Handphone',
+          demandOption: true,
+          type: 'string',
 
-// }else if(command ==='list'){
+       },
+      },
+      handler(argv) {
+        contacts.simpanContact(argv.nama, argv.email, argv.nohp);
+        }
+        // console.log(contact);
+       });
 
-// }
-
-// const contacts = require('./contacts');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const contacts = require ('./contacts');
-
-const main = async () => {
-  const nama = await contacts.tulisPertanyaan('Masukan Nama Anda : ');
-  const alamat = await contacts.tulisPertanyaan('Masukan Alamat Anda : ');
-  const nohp = await contacts.tulisPertanyaan('Masukan nohp Anda : ');
-
-  contacts.simpanContact(nama, alamat, nohp);
-};
-
-main();
+yargs.perse(); 
