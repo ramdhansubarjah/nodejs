@@ -35,12 +35,19 @@ if(email){
     chalk.red.inverse.bold('alamat tidak valid!'));
   }
 }
+const loadContact =() => {
+const fileBuffer = fs.readFileSync('data/contacts.json', 'utf-8')
+    const contacts = JSON.parse(fileBuffer);
+    return contacts;
 
+}
 
 const simpanContact = (nama, alamat, nohp) =>{
-    const contact = { nama, alamat, nohp};
-    const fileBuffer = fs.readFileSync('data/contacts.json', 'utf-8')
-    const contacts = JSON.parse(fileBuffer);
+    const contact  = { nama, alamat, nohp};
+    // const fileBuffer = fs.readFileSync('data/contacts.json', 'utf-8')
+    // const contacts = JSON.parse(fileBuffer);
+    const contacts = loadContact();
+
 
 // cek duplikat
 const duplikat =  contacts.find((contact) => contact.nama === nama);
@@ -65,4 +72,57 @@ contacts.push(contact);
 
 };
 
-module.exports = {tulisPertanyaan, simpanContact };
+
+const listcontacts = () => {;
+  const contacts  = loadContact();
+  contacts.forEach((contact, i) => {
+    console.log('${i + 1}. ${contact.nama} - ${contact.noHP}');
+
+});
+};
+
+const detailContact = (nama) => {
+  const contacts = loadContact();
+
+  const contact = contacts.find(
+  (contact) => contact.nama.toLoweCase()  === nama.toLoweCase()
+  );
+
+  if(!contact){ 
+    console.log(chalk.red.inverse.bold('${nama} tidak ditemukan! '));
+    return false;   
+  }
+
+  console.log(chalk.red.inverse.bold(contact.nama));
+  console.log(contact.nohp);
+  if (constact.alamat) {
+     console.log(contact.alamat);
+      }
+  };
+
+
+  const deleteContact = (nama) =>{;
+    const contacts = loadContact();
+    const newContacts = contacts.filter(
+      (contact) => contact.nama.toLoweCase() !==nama.toLoweCase()
+    );
+
+
+    if(!contact.length === newContacts.legth) { 
+      console.log(chalk.red.inverse.bold('${nama} tidak ditemukan! '));
+      return false;   
+    }
+
+    fs.writeFileSync('data/contacts.json', JSON.stringify(newContacts));
+    console.log(
+    chalk.green.inverse.bold('data contact ${nama} berhasil dihapus!')
+    ); 
+  };   
+
+
+
+
+
+
+
+module.exports = {tulisPertanyaan, listContact, detailContact };
